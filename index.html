@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thodin LLC | Strategic Tech Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --blue: #4339F2;
+      --purple: #9333EA;
+      --pink: #EC4899;
+      --dark: #0a0a0a;
+      --gray-900: #111111;
+      --gray-800: #1a1a1a;
+      --gray-700: #2a2a2a;
+      --gray-600: #3a3a3a;
+      --gray-400: #888888;
+      --gray-300: #a0a0a0;
+      --gray-100: #e5e5e5;
+      --white: #ffffff;
+      --gradient: linear-gradient(135deg, var(--blue) 0%, var(--purple) 50%, var(--pink) 100%);
+    }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dark);
+      color: var(--gray-100);
+      line-height: 1.6;
+      font-size: 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+    
+    /* Animated gradient orbs */
+    .gradient-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--purple);
+      top: -200px;
+      right: -200px;
+      animation: float1 20s ease-in-out infinite;
+    }
+    
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--blue);
+      bottom: -150px;
+      left: -150px;
+      animation: float2 25s ease-in-out infinite;
+    }
+    
+    .orb-3 {
+      width: 400px;
+      height: 400px;
+      background: var(--pink);
+      top: 50%;
+      left: 50%;
+      animation: float3 30s ease-in-out infinite;
+    }
+    
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-50px, 100px) scale(1.1); }
+      66% { transform: translate(50px, -50px) scale(0.9); }
+    }
+    
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(80px, -60px) scale(1.15); }
+      66% { transform: translate(-40px, 40px) scale(0.85); }
+    }
+    
+    @keyframes float3 {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
+    }
+    
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+
+    .logo-link { text-decoration: none; }
+    .logo-img { height: 32px; width: auto; }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.4rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .logo-link { text-decoration: none; }
+    
+    .nav-links { display: none; gap: 2rem; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--gray-400);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+    
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+    }
+    
+    section {
+      padding: 5rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+    
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Gradient text highlight effect */
+    h1 .highlight {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    
+    p { color: var(--gray-300); margin-bottom: 1rem; }
+    p.large { font-size: 1.15rem; color: var(--gray-400); }
+    
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 6rem;
+      position: relative;
+    }
+    
+    .hero .tagline {
+      font-size: 0.85rem;
+      color: var(--gray-400);
+      margin-top: 2rem;
+    }
+    
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 1.8rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 4px 20px rgba(147, 51, 234, 0.3);
+    }
+    
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 30px rgba(147, 51, 234, 0.4);
+    }
+    
+    .btn-ghost {
+      background: transparent;
+      color: var(--gray-300);
+      border: 1.5px solid var(--gray-600);
+    }
+    
+    .btn-ghost:hover { 
+      border-color: var(--purple); 
+      color: var(--white);
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
+    }
+    
+    .client-logo.logo-big { height: 70px; }
+
+    .client-logo:hover {
+      opacity: 1;
+      filter: grayscale(0%);
+    }
+
+    .logos-section {
+      padding: 3rem 0;
+      overflow: hidden;
+      background: rgba(17,17,17,0.5);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .logo-carousel {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+    
+    .logo-carousel::before,
+    .logo-carousel::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    
+    .logo-carousel::before {
+      left: 0;
+      background: linear-gradient(to right, var(--gray-900), transparent);
+    }
+    
+    .logo-carousel::after {
+      right: 0;
+      background: linear-gradient(to left, var(--gray-900), transparent);
+    }
+    
+    .logo-track {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      animation: scroll 25s linear infinite;
+      width: max-content;
+    }
+    
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    .client-logo {
+      flex-shrink: 0;
+      height: 45px;
+      width: auto;
+      padding: 0.5rem 1.5rem;
+      object-fit: contain;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+      filter: grayscale(100%);
+    }
+    
+    .client-logo:hover {
+      opacity: 1;
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+    
+    .card-grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    @media (min-width: 640px) {
+      .card-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    .card {
+      background: rgba(26,26,26,0.6);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--gray-700);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    
+    .card:hover { 
+      border-color: var(--gray-600);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .card:hover::before { transform: scaleX(1); }
+    
+    .steps { margin-top: 2rem; }
+    .step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .step::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 40px;
+      bottom: -20px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--purple), transparent);
+    }
+    
+    .step:last-child::before { display: none; }
+    
+    .step-num {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      background: var(--gradient);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.4);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .stats {
+      display: grid;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    @media (min-width: 640px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(26,26,26,0.6);
+      border-radius: 12px;
+      border: 1px solid var(--gray-700);
+      transition: all 0.3s ease;
+    }
+    
+    .stat:hover {
+      border-color: rgba(147, 51, 234, 0.5);
+      box-shadow: 0 0 30px rgba(147, 51, 234, 0.1);
+    }
+    
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: 0.9rem; color: var(--gray-400); margin-top: 0.25rem; }
+    
+    .case {
+      background: rgba(26,26,26,0.6);
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--gray-700);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .case::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      padding: 1px;
+      background: var(--gradient);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .case:hover::after { opacity: 1; }
+    .case:hover { transform: translateY(-2px); }
+    
+    .case h3 { color: var(--white); }
+    .case p { color: var(--gray-300); margin: 0; }
+    .case .result {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--gray-700);
+      font-weight: 500;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .fit-list { margin: 1.5rem 0; }
+    .fit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--gray-300);
+      transition: all 0.3s ease;
+    }
+    
+    .fit-item:hover { transform: translateX(4px); }
+    
+    .fit-icon {
+      flex-shrink: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-top: 0.2rem;
+    }
+    .fit-icon.check { color: var(--purple); }
+    .fit-icon.x { color: var(--gray-600); }
+    
+    .callout {
+      background: linear-gradient(135deg, rgba(67,57,242,0.1) 0%, rgba(147,51,234,0.1) 50%, rgba(236,72,153,0.1) 100%);
+      border: 1px solid rgba(147, 51, 234, 0.3);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .callout::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+    
+    .callout p {
+      color: var(--gray-100);
+      margin: 0;
+      font-size: 1.05rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .contact-section {
+      background: rgba(17,17,17,0.6);
+      border-radius: 16px;
+      border: 1px solid var(--gray-700);
+      backdrop-filter: blur(10px);
+    }
+    
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--gray-300);
+      margin-bottom: 0.4rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid var(--gray-700);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(26,26,26,0.8);
+      color: var(--white);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--gray-600);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    
+    .contact-email {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-700);
+      text-align: center;
+    }
+    .contact-email a {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .contact-email a:hover {
+      filter: brightness(1.2);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      color: var(--gray-600);
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+    
+    .footer-logo-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-logo {
+      height: 40px;
+      width: auto;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+    
+    .footer-logo:hover {
+      opacity: 1;
+    }
+    
+    .section-logo {
+      height: 36px;
+      width: auto;
+      margin-bottom: 1.5rem;
+      opacity: 0.8;
+    }
+    
+    .hero-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: clamp(8rem, 25vw, 20rem);
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0.03;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: -1;
+      letter-spacing: -0.02em;
+    }
+    
+    /* Animated gradient line */
+    .gradient-line {
+      height: 2px;
+      background: var(--gradient);
+      background-size: 200% 100%;
+      animation: gradientMove 3s ease infinite;
+      margin: 3rem 0;
+      border-radius: 2px;
+    }
+    
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    /* Selection styling */
+    ::selection {
+      background: rgba(147, 51, 234, 0.3);
+      color: var(--white);
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { 
+      background: var(--gray-700); 
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gray-600); }
+  </style>
+</head>
+<body>
+  <!-- Floating gradient orbs -->
+  <div class="gradient-orb orb-1"></div>
+  <div class="gradient-orb orb-2"></div>
+  <div class="gradient-orb orb-3"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <!-- ============================================
+           🔷 COMPANY LOGO - Swap your logo here
+           Replace the <span> below with an <img> tag:
+           <img src="logo.png" alt="Thodin" class="logo-img">
+           ============================================ -->
+      <a href="#" class="logo-link">
+        <span class="logo"></span>
+        <img src="assets/logos/SVG/Logo Thodin 3.svg" alt="Thodin" class="logo-img">
+      </a>
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#approach">Approach</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-watermark">THODIN</div>
+    <p class="section-label">Thodin LLC</p>
+    <h1>Strategic tech consulting for teams that <span class="highlight">can't afford to guess.</span></h1>
+    <p class="large">We help product and engineering leaders make clear, confident technology decisions—architecture, scaling, and delivery—without adding permanent headcount.</p>
+    <div class="btn-group">
+      <a href="#contact" class="btn btn-primary">Schedule a working session</a>
+      <a href="#services" class="btn btn-ghost">View capabilities</a>
+    </div>
+    <p class="tagline">Independent, vendor-neutral technology consultancy. No job too small.</p>
+  </section>
+
+  <section class="logos-section">
+    <p class="section-label" style="text-align: center;">Trusted by</p>
+    <div class="logo-carousel">
+        <div class="logo-track">
+            <!-- ============================================
+                 🔷 CLIENT LOGOS - Add your client logos here
+                 
+                 Replace these placeholder images with your own:
+                 <img src="logos/client-name.png" alt="Client Name" class="client-logo">
+                 
+                 ⚠️  IMPORTANT: Duplicate all logos in both sets
+                     for seamless infinite scrolling!
+                 ============================================ -->
+            
+            <!-- First set of logos -->
+            <img src="assets/clients/goodleap-white-orange-gradient-cR-4x.png" alt="Client 1" class="client-logo">
+            <img src="assets/clients/TQ.svg" alt="Client 2" class="client-logo">
+            <img src="assets/clients/Sofbit White.png" alt="Client 3" class="client-logo">
+            <img src="assets/clients/freedom3.svg" alt="Client 4" class="client-logo logo-big">
+            <img src="assets/clients/Untitled.svg" alt="Client 5" class="client-logo logo-big">
+    
+            
+            <!-- Duplicate set (copy the same logos here for seamless loop) -->
+            <img src="assets/clients/goodleap-white-orange-gradient-cR-4x.png" alt="Client 1" class="client-logo">
+            <img src="assets/clients/TQ.svg" alt="Client 2" class="client-logo">
+            <img src="assets/clients/Sofbit White.png" alt="Client 3" class="client-logo">
+            <img src="assets/clients/freedom3.svg" alt="Client 4" class="client-logo logo-big">
+            <img src="assets/clients/Untitled.svg" alt="Client 5" class="client-logo logo-big">
+    
+          </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <p class="section-label">What we do</p>
+    <h2>Untangle complexity in your technology stack</h2>
+    <p>We partner with startups and established organizations to clarify their technology stack and delivery processes.</p>
+    
+    <div class="card-grid">
+      <div class="card">
+        <h3>Architecture & Platform Strategy</h3>
+        <p>Design or refine system architecture with a focus on reliability, observability, and cost control.</p>
+      </div>
+      <div class="card">
+        <h3>Scaling & Performance</h3>
+        <p>Identify bottlenecks, simplify systems, and create a realistic roadmap from "works for now" to "scales by design."</p>
+      </div>
+      <div class="card">
+        <h3>Technical Due Diligence</h3>
+        <p>Neutral technical assessments for investors, acquirers, and leadership teams.</p>
+      </div>
+      <div class="card">
+        <h3>Delivery & Process Coaching</h3>
+        <p>Improve how teams plan, ship, and learn—without heavyweight bureaucracy.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-line" style="max-width:900px;margin:0 auto;"></div>
+
+  <section id="approach">
+    <p class="section-label">How we work</p>
+    <h2>Small on purpose</h2>
+    <p>Every engagement is direct, fast-moving, and focused on decisions that actually change outcomes.</p>
+    
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Align on outcomes</h3>
+          <p>Clarify what success means in business terms: revenue, risk reduction, timeline, or runway.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Map reality</h3>
+          <p>Assess architecture, code, infra, and team practices—no blame, just facts.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Decide and design</h3>
+          <p>Prioritize high-leverage decisions and design practical options, with trade-offs made explicit.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Support execution</h3>
+          <p>Stay close as teams implement, adjusting plans based on what reality says.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="track-record">
+    <p class="section-label">Experience</p>
+    <h2>Track record</h2>
+    <p>Senior-level experience across cloud-native systems, high-throughput data pipelines, and modern product engineering teams.</p>
+    
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Complex systems reviewed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">30–60%</div>
+        <div class="stat-label">Typical incident reduction</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2–4×</div>
+        <div class="stat-label">Faster delivery on critical projects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">Millions</div>
+        <div class="stat-label">End-users impacted</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <p class="section-label">Selected work</p>
+    <h2>Anonymized case studies</h2>
+    
+    <div class="case">
+      <h3>Stabilizing a high-growth SaaS platform</h3>
+      <p>A B2B SaaS company was experiencing frequent outages as customer growth accelerated. We performed an architecture review and guided the rollout of observability and incident practices.</p>
+      <p class="result">Result: Significant drop in downtime and regained customer trust ahead of funding.</p>
+    </div>
+    
+    <div class="case">
+      <h3>From rewrite anxiety to a focused modernization roadmap</h3>
+      <p>A product team was stuck between a risky full rewrite and an aging monolith. We helped them identify a phased strangler-pattern approach.</p>
+      <p class="result">Result: De-risked path forward, measurable progress within weeks.</p>
+    </div>
+    
+    <div class="case">
+      <h3>Technical due diligence for an acquisition</h3>
+      <p>An investor group needed a clear view of technical risk in a data-heavy product. We delivered an independent assessment of architecture and team practices.</p>
+      <p class="result">Result: Informed negotiation and no surprises after closing.</p>
+    </div>
+  </section>
+
+  <section id="fit">
+    <p class="section-label">Who we work with</p>
+    <h2>Good fit for</h2>
+    
+    <div class="fit-list">
+      <div class="fit-item">
+        <svg class="fit-icon check" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Product-driven companies that see technology as a strategic asset.</span>
+      </div>
+      <div class="fit-item">
+        <svg class="fit-icon check" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Teams that want frank, senior-level input without consulting theatre.</span>
+      </div>
+      <div class="fit-item">
+        <svg class="fit-icon check" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+        <span>Organizations comfortable with short, intense engagements that ship decisions.</span>
+      </div>
+    </div>
+    
+    <div class="callout">
+      <p>No client or project is too small. A quick architecture review, a second opinion on a hire, a one-hour strategy call—we're here to help.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-section">
+    <img src="assets/logos/SVG/Logo Thodin 3.svg" alt="Thodin" class="section-logo">
+    <p class="section-label">Get in touch</p>
+    <h2>Let's talk</h2>
+    <p>Share a bit of context and we'll respond with honest next steps.</p>
+    
+    <form action="https://formspree.io/f/xkogapna" method="POST">
+      <div class="card-grid">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company">
+        </div>
+      </div>
+      <div class="card-grid">
+        <div class="form-group">
+          <label for="role">Role</label>
+          <input type="text" id="role" name="role">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="_replyto" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="message">What's going on?</label>
+        <textarea id="message" name="message" placeholder="Tell us about your situation..."></textarea>
+      </div>
+      
+      <input type="hidden" name="_subject" value="New inquiry from Thodin website">
+      
+      <button type="submit" class="btn btn-primary" style="width: 100%;">Send message</button>
+    </form>
+    
+    <div class="contact-email">
+      <p>Or email us directly at <a href="mailto:contact@thodin.io">info@thodinllc.com</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <a href="#" class="footer-logo-link">
+      <img src="assets/logos/SVG/Logo Thodin 2.svg" alt="Thodin" class="footer-logo">
+    </a>
+    <p>© 2025 Thodin LLC. All rights reserved.</p>
+  </footer>
+</body>
+</html>
