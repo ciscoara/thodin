@@ -228,6 +228,7 @@
       flex-direction: column;
       justify-content: center;
       padding-top: 6rem;
+      padding-bottom: 60px;
       position: relative;
     }
     
@@ -237,6 +238,27 @@
       margin-top: 2rem;
     }
     
+    .hero-divider {
+      width: 400px;
+      max-width: 80%;
+      height: 2px;
+      margin: 40px auto 0;
+      background: linear-gradient(90deg, transparent, var(--purple), var(--pink), transparent);
+      border-radius: 2px;
+      animation: pulse 18s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 85%, 100% {
+    opacity: 0.4;
+    box-shadow: none;
+  }
+  92% {
+    opacity: 1;
+    box-shadow: 0 0 20px var(--purple), 0 0 40px var(--pink);
+  }
+}
+
     .btn-group {
       display: flex;
       flex-wrap: wrap;
@@ -749,6 +771,8 @@
       <a href="#services" class="btn btn-ghost">View capabilities</a>
     </div>
     <p class="tagline">Independent, vendor-neutral technology consultancy. No job too small.</p>
+
+    <div class="hero-divider"></div>
   </section>
 
   <section class="logos-section">
@@ -861,22 +885,22 @@
     <h2>Track record</h2>
     <p>Senior-level experience across cloud-native systems, high-throughput data pipelines, and modern product engineering teams.</p>
     
-    <div class="stats-grid">
+    <div class="stats">
       <div class="stat">
-        <span class="stat-number">18</span>
-        <span class="stat-label">Years in tech</span>
+        <div class="stat-num">18</div>
+        <div class="stat-label">Years in tech</div>
       </div>
       <div class="stat">
-        <span class="stat-number">9</span>
-        <span class="stat-label">Years in leadership</span>
+        <div class="stat-num">9</div>
+        <div class="stat-label">Years in leadership</div>
       </div>
       <div class="stat">
-        <span class="stat-number">10+</span>
-        <span class="stat-label">Industries</span>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Industries</div>
       </div>
       <div class="stat">
-        <span class="stat-number">Millions</span>
-        <span class="stat-label">Users impacted</span>
+        <div class="stat-num">Millions</div>
+        <div class="stat-label">Users impacted</div>
       </div>
     </div>
   </section>
