@@ -52,6 +52,24 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='https://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     }
     
+    /* Fine grid texture, fading toward the edges */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -3;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, #000 0%, transparent 75%);
+    }
+
     /* Animated gradient orbs */
     .gradient-orb {
       position: fixed;
@@ -228,8 +246,12 @@
       flex-direction: column;
       justify-content: center;
       padding-top: 6rem;
-      padding-bottom: 60px;
+      padding-bottom: 20px;
       position: relative;
+    }
+
+    .hero + section {
+      padding-top: 2rem;
     }
     
     .hero .tagline {
@@ -468,11 +490,12 @@
     
     .stats {
       display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
       margin: 2rem 0;
     }
     @media (min-width: 640px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stats { grid-template-columns: repeat(3, 1fr); }
     }
     .stat {
       text-align: center;
@@ -719,6 +742,22 @@
       50% { background-position: 100% 50%; }
     }
     
+    /* Scroll-reveal transitions */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
     /* Selection styling */
     ::selection {
       background: rgba(147, 51, 234, 0.3);
@@ -799,7 +838,7 @@
   </section>
 -->
 
-  <section id="about">
+  <section id="about" class="reveal">
     <p class="section-label">About Thodin</p>
     <p>After 18 years in tech — from Solutions Architect to Director of IT to VP of Technology to CTO — our founder noticed the same problem everywhere: business and technology teams often struggle to understand each other, and that disconnect costs companies real money.</p>
     <p>Thodin was created to fix that.</p>
@@ -807,7 +846,7 @@
     <p>No job is too small. No challenge too complex. And when we need reinforcements, we tap into a trusted network of top-tier specialists.</p>
   </section>
 
-  <section id="services">
+  <section id="services" class="reveal">
     <p class="section-label">What we do</p>
     <h2>Untangle complexity in your technology stack</h2>
     <p>We partner with startups and established organizations to clarify their technology stack and delivery processes.</p>
@@ -834,7 +873,7 @@
 
   <div class="gradient-line" style="max-width:900px;margin:0 auto;"></div>
 
-  <section id="approach">
+  <section id="approach" class="reveal">
     <p class="section-label">How we work</p>
     <h2>Small on purpose</h2>
     <p>Every engagement is direct, fast-moving, and focused on decisions that actually change outcomes.</p>
@@ -871,7 +910,7 @@
     </div>
   </section>
 
-  <section id="track-record">
+  <section id="track-record" class="reveal">
     <p class="section-label">Experience</p>
     <h2>Track record</h2>
     <p>Senior-level experience across cloud-native systems, high-throughput data pipelines, and modern product engineering teams.</p>
@@ -890,13 +929,17 @@
         <div class="stat-label">Industries</div>
       </div>
       <div class="stat">
-        <div class="stat-num">Millions</div>
-        <div class="stat-label">Users impacted</div>
+        <div class="stat-num">4</div>
+        <div class="stat-label">Executive roles held</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Companies helped</div>
       </div>
     </div>
   </section>
 
-  <section id="work">
+  <section id="work" class="reveal">
     <p class="section-label">Selected work</p>
     <h2>Anonymized case studies</h2>
     
@@ -919,7 +962,7 @@
     </div>
   </section>
 
-  <section id="fit">
+  <section id="fit" class="reveal">
     <p class="section-label">Who we work with</p>
     <h2>Good fit for</h2>
     
@@ -943,7 +986,7 @@
     </div>
   </section>
 
-  <section id="contact" class="contact-section">
+  <section id="contact" class="contact-section reveal">
     <img src="assets/logos/SVG/Logo Thodin 3.svg" alt="Thodin" class="section-logo">
     <p class="section-label">Get in touch</p>
     <h2>Let's talk</h2>
@@ -989,7 +1032,27 @@
     <a href="#" class="footer-logo-link">
       <img src="assets/logos/SVG/Logo Thodin 2.svg" alt="Thodin" class="footer-logo">
     </a>
-    <p>© 2025 Thodin LLC. All rights reserved.</p>
+    <p>© 2026 Thodin LLC. All rights reserved.</p>
   </footer>
+
+  <script>
+    var revealEls = document.querySelectorAll('.reveal');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
+
+      revealEls.forEach(function (el) { io.observe(el); });
+    }
+  </script>
 </body>
 </html>
